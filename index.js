@@ -1,7 +1,7 @@
 const axios = require('axios');
 const os = require('os');
 
-const regularQueryInterval = 1 * 60 * 1000;
+const regularQueryInterval = 60 * 60 * 1000;
 const alertQueryInterval = 5 * 60 * 1000;
 
 var TelegramBot = require('node-telegram-bot-api'),
