@@ -77,7 +77,7 @@ const checkVersion = async (url) => {
     { headers: { 'content-type': 'application/json' } }
   );
   let result = response.data.result;
-  return result.number;
+  return result;
 };
 
 App();
