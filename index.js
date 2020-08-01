@@ -1,7 +1,7 @@
 const axios = require('axios');
 const os = require('os');
 
-const regularQueryInterval = 60 * 60 * 1000;
+const regularQueryInterval = 1 * 60 * 1000;
 const alertQueryInterval = 5 * 60 * 1000;
 
 var TelegramBot = require('node-telegram-bot-api'),
@@ -15,8 +15,7 @@ const App = async () => {
   // telegram bot shall check out the state every 5mins, if everything ok, no warnings
 
   // telegram bot shall check out and print out state every 60mins
-  let system = await checkVersion(`http://localhost:9901`);
-  console.log(system);
+
   setInterval(query, alertQueryInterval);
   setInterval(regularQuery, regularQueryInterval);
 };
@@ -31,12 +30,14 @@ const checkNode = async () => {
 
   let officialBlock = await checkBlock(`https://rpc-sitara.stafi.io`);
   let myBlock = await checkBlock(`http://localhost:9901`);
+  let mySystem = await checkVersion(`http://localhost:9901`);
 
   return {
     isSync: result.isSyncing,
     peers: result.peers,
     officialBlock: parseInt(officialBlock),
     myBlock: parseInt(myBlock),
+    mySystem: mySystem,
   };
 };
 
@@ -55,7 +56,7 @@ const query = async () => {
 
 const regularQuery = async () => {
   let info = await checkNode();
-  let message = `stafi node has ${info.peers} peers, Block at ${info.myBlock}, Official Block at ${info.officialBlock}`;
+  let message = `stafi node has ${info.peers} peers, Block at ${info.myBlock}, Official Block at ${info.officialBlock}, system: ${info.mySystem}`;
   await telegram.sendMessage(chatId, message);
   console.log(message);
 };
