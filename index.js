@@ -15,6 +15,8 @@ const App = async () => {
   // telegram bot shall check out the state every 5mins, if everything ok, no warnings
 
   // telegram bot shall check out and print out state every 60mins
+  let system = await checkVersion(`http://localhost:9901`);
+  console.log(system);
   setInterval(query, alertQueryInterval);
   setInterval(regularQuery, regularQueryInterval);
 };
@@ -62,6 +64,16 @@ const checkBlock = async (url) => {
   let response = await axios.post(
     url,
     { id: 1, jsonrpc: '2.0', method: 'chain_getHeader', params: [] },
+    { headers: { 'content-type': 'application/json' } }
+  );
+  let result = response.data.result;
+  return result.number;
+};
+
+const checkVersion = async (url) => {
+  let response = await axios.post(
+    url,
+    { id: 1, jsonrpc: '2.0', method: 'system_version', params: [] },
     { headers: { 'content-type': 'application/json' } }
   );
   let result = response.data.result;
